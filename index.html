@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Pretty Weather Forecast</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="src/index.css" />
+  </head>
+  <body>
+    <div class="weather-app">
+      <h1>Pretty Weather Forecast</h1>
+      <header>
+        <form class="search-form" id="search-form">
+          <input
+            type="search"
+            placeholder="Enter a city"
+            required
+            id="search-input"
+            class="search-form-input"
+          />
+          <input type="submit" value="search" class="search-button" />
+        </form>
+      </header>
+      <main>
+        <div class="weather-app-data">
+          <div class="temperature-container">
+            <div class="weather-app-condition" id="weather-app-condition">
+              Clear sky
+            </div>
+            <div class="temperature-unit">
+              <div
+                class="weather-app-temperature"
+                id="weather-app-temperature"
+              ></div>
+              <div class="weather-app-unit">°</div>
+            </div>
+            <div class="icon-wrapper" id="icon"></div>
+          </div>
+          <div class="city-date-container">
+            <div class="weather-app-city" id="weather-app-city"></div>
+            <div class="weather-app-timestamp" id="weather-app-timestamp"></div>
+          </div>
+          <div class="weather-app-details">
+            <div class="real-feel">
+              <strong id="feel-like"></strong><br />
+              Real feel
+            </div>
+            <div class="pressure">
+              <strong id="current-pressure"></strong><br />
+              Pressure
+            </div>
+            <div class="humidity-levels">
+              <strong id="current-humidity"></strong><br />
+              Rain
+            </div>
+            <div class="wind-speed">
+              <strong id="current-wind"></strong><br />
+              Wind
+            </div>
+          </div>
+          <div class="weather-forecast" id="forecast"></div>
+        </div>
+      </main>
+      <footer>
+        This project was coded by
+        <a href="https://github.com/CtrlFrontfire" target="_blank"
+          >Argyro Vlachaki</a
+        >, is
+        <a
+          href="https://github.com/CtrlFrontfire/pretty-weather-forecast"
+          target="_blank"
+          >open-sourced on GitHub</a
+        >
+        and
+        <a href="https://pretty-weather-forecast.netlify.app/" target="_blank"
+          >hosted on Netlify</a
+        >
+      </footer>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
