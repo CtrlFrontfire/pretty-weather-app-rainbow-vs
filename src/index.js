@@ -1,203 +1,134 @@
-body {
-  background-color: #6643b5;
-  font-family: "Roboto", sans-serif;
-}
-a {
-  color: #6643b5;
-}
-h1 {
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 100%);
-  color: transparent;
-  margin: 5px 0 10px 0;
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-header {
-  padding: 10px 0 10px 0;
-}
-main {
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
-.weather-app {
-  background: #8594e4;
-  margin: 30px auto;
-  padding: 40px;
-  max-width: 600px;
-  border: 1px solid #8594e4;
-  border-radius: 10px;
-  box-shadow: 0 30px 50px rgba(65, 50, 100, 0.774);
+function displayTemperature(response) {
+  let temperatureElement = document.querySelector("#weather-app-temperature");
+  let temperature = Math.round(response.data.temperature.current);
+  let cityElement = document.querySelector("#weather-app-city");
+  let currentConditionElement = document.querySelector(
+    "#weather-app-condition"
+  );
+  let realFeelElement = document.querySelector("#feel-like");
+  let realFeel = Math.round(response.data.temperature.feels_like);
+  let pressureElement = document.querySelector("#current-pressure");
+  let humidityElement = document.querySelector("#current-humidity");
+  let windSpeedElement = document.querySelector("#current-wind");
+  let timeElement = document.querySelector("#weather-app-timestamp");
+  let date = new Date(response.data.time * 1000);
+  let iconElement = document.querySelector("#icon");
+
+  cityElement.innerHTML = response.data.city;
+  temperatureElement.innerHTML = temperature;
+  currentConditionElement.innerHTML = response.data.condition.description;
+  iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="condition-icon" />`;
+  realFeelElement.innerHTML = `${realFeel}°`;
+  pressureElement.innerHTML = `${response.data.temperature.pressure}`;
+  humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
+  windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
+  timeElement.innerHTML = formatDate(date);
+
+  getForecast(response.data.city);
 }
 
-form {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+function formatDate(date) {
+  let year = date.getFullYear();
+  let month = date.getMonth();
+  let dateNow = date.getDate();
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  let months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  let day = days[date.getDay()];
+  let formattedMonth = months[month];
+  return `${day} ${dateNow} ${formattedMonth} ${year}, ${hours}:${minutes}`;
 }
 
-.search-form-input {
-  background-color: #d5def59c;
-  border: 1px solid #430f585b;
-  border-radius: 5px;
-  font-size: 15px;
-  width: 80%;
-  padding: 15px 20px;
-}
-input::placeholder {
-  color: #430f5881;
+function searchCity(city) {
+  let apiKey = "d32099afo5328e0346f4tb17db5ff833";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayTemperature);
 }
 
-.search-button {
-  background: #6643b5;
-  color: #d5def5;
-  border: none;
-  border-radius: 5px;
-  padding: 15px 27px;
-  font-size: 16px;
-  transition: all 250ms ease-in-out;
-}
-.search-button:hover {
-  background: #d5def5;
-  color: #6643b5;
-  cursor: pointer;
-  box-shadow: 0px 0px 7px 1px rgba(91, 63, 159, 0.774);
-  font-weight: bold;
+function handleSearchSubmit(event) {
+  event.preventDefault();
+  let cityUserInput = document.querySelector("#search-input");
+  searchCity(cityUserInput.value);
 }
 
-.weather-app-data {
-  display: flex;
-  flex-direction: column;
-}
-.temperature-container {
-  display: flex;
-  padding: 10px;
-  flex-direction: column;
-  align-items: center;
-}
-.weather-app-temperature {
-  display: flex;
-}
-.weather-app-condition {
-  font-size: 18px;
-  letter-spacing: 0.2rem;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 85%);
-  color: transparent;
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.temperature-unit {
-  display: flex;
-  margin: 5px 0 0 0;
-  height: 80px;
-}
-.weather-app-temperature {
-  font-size: 65px;
-  font-weight: bold;
-  margin-top: 5px;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 65%);
-  color: transparent;
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.weather-app-unit {
-  padding-top: 5px;
-  margin-top: 5px;
-  font-size: 45px;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 100%);
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[date.getDay()];
 }
 
-.condition-icon {
-  width: 190px;
-  height: 190px;
-  display: flex;
-  justify-content: center;
-  filter: drop-shadow(0px 0px 20px rgb(255, 255, 255));
+function getForecast(city) {
+  apiKey = "d32099afo5328e0346f4tb17db5ff833";
+  apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+  axios(apiUrl).then(displayForecast);
 }
 
-.weather-app-city {
-  font-size: 30px;
-  padding: 0 0 5px 0;
-  font-weight: bold;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 65%);
-  color: transparent;
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.weather-app-timestamp {
-  font-size: 18px;
-  letter-spacing: 0.1rem;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 85%);
-  color: transparent;
-  text-align: center;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.weather-app-details {
-  display: block;
-  margin: 20px auto 10px;
-  column-count: 2;
-  column-fill: balance;
-  font-size: 20px;
-}
-.real-feel,
-.pressure,
-.wind-speed,
-.humidity-levels {
-  text-align: center;
-  width: 150px;
-  padding: 5px 10px 10px 10px;
-  background-image: linear-gradient(0deg, transparent 0, #f2f2f2 100%);
-  color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+function displayForecast(response) {
+  let forecastElement = document.querySelector("#forecast");
+
+  let forecastHtml = "";
+
+  response.data.daily.forEach(function (day, index) {
+    if (index < 5) {
+      forecastHtml =
+        forecastHtml +
+        `
+       <div class="weather-forecast-day">
+          <div class="weather-forecast-date">${formatDay(day.time)}</div>
+          <div class="icon-wrapper">
+          <img src="${day.condition.icon_url}" class="weather-forecast-icon" />
+          </div>
+          <div class="weather-forecast-temperatures">
+            <div class="weather-forecast-temperature">
+              <strong>${Math.round(day.temperature.maximum)}°</strong>
+           </div>
+            <div class="weather-forecast-temperature">${Math.round(
+              day.temperature.minimum
+            )}°</div>
+            </div>
+        </div>
+        `;
+    }
+  });
+
+  forecastElement.innerHTML = forecastHtml;
 }
 
-.weather-forecast {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding-top: 25px;
-  border-top: 1px solid #f9f7fe33;
-}
+let searchFormElement = document.querySelector("#search-form");
+searchFormElement.addEventListener("submit", handleSearchSubmit);
 
-.weather-forecast-date {
-  color: #f2f2f2;
-  opacity: 80%;
-  text-align: center;
-  margin-bottom: 5px;
-}
-
-.weather-forecast-icon {
-  display: block;
-  margin: 0 auto;
-  filter: drop-shadow(0px 0px 7px rgb(255, 255, 255));
-}
-
-.weather-forecast-temperatures {
-  color: #f2f2f2;
-  opacity: 80%;
-  text-align: center;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-top: 10px auto;
-}
-.weather-forecast-temperature {
-  padding: 0 8px;
-}
-
-footer {
-  border-top: 1px solid #f9f7fe33;
-  padding: 30px 0 0 0;
-  font-size: 14px;
-  text-align: center;
-  color: white;
-  opacity: 65%;
-}
+searchCity("London");
